@@ -8,3 +8,5 @@ ipch/
 x64/
 res/
 .vs/
+*.opendb
+*.bmp
