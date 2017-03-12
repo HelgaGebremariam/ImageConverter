@@ -1,0 +1,10 @@
+*.exe
+*.jpg
+*.obj
+*.pdb
+*.pch
+Debug/
+ipch/
+x64/
+res/
+.vs/
