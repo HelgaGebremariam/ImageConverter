@@ -10,3 +10,5 @@ res/
 .vs/
 *.opendb
 *.bmp
+*.db
+*.sdf
