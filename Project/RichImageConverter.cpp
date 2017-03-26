@@ -37,7 +37,7 @@ bool CRichImageConverter<T>::CreateBitmapDIB(int AWidth, int AHeight)
 	BitmapInfo.bmiHeader.biWidth = AWidth;
 	BitmapInfo.bmiHeader.biHeight = AHeight;
 	BitmapInfo.bmiHeader.biPlanes = 1;
-	BitmapInfo.bmiHeader.biBitCount = 24;
+	BitmapInfo.bmiHeader.biBitCount = 32;
 	BitmapInfo.bmiHeader.biCompression = BI_RGB;
 
 	// ñîçäàòü êîíòåêñò óñòðîéñòâà, ñîâìåñòèìûé ñ ãëàâíûì îêíîì

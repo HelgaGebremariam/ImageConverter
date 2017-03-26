@@ -52,9 +52,10 @@ void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
 
 	if (bShow &&(nStatus==0))
 	{
-		ComboBox_ColorType.Create(WS_CHILD|WS_VISIBLE|CBS_DROPDOWNLIST, CRect(70,15,200,15+20*(1+12)), this, ID_CB_ColorType);
+		ComboBox_ColorType.Create(WS_CHILD|WS_VISIBLE|CBS_DROPDOWNLIST, CRect(70,15,210,15+20*(1+12)), this, ID_CB_ColorType);
 
 		ComboBox_ColorType.ResetContent();
+		//
 		ComboBox_ColorType.AddString(_T("Autumn"));
 		ComboBox_ColorType.AddString(_T("Bone"));
 		ComboBox_ColorType.AddString(_T("Cool"));
@@ -67,10 +68,9 @@ void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
 		ComboBox_ColorType.AddString(_T("Spring"));
 		ComboBox_ColorType.AddString(_T("Summer"));
 		ComboBox_ColorType.AddString(_T("Winter"));
-
 		ComboBox_ColorType.SetCurSel(0);
-
-		openFileButton.Create(_T("Open file"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, CRect(140, 30, 250, 15 + 20 * (1 + 12)), this, ID_OPENFILEBUTTON);
+		
+		openFileButton.Create(_T("Open file"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, CRect(140, 30, 150, 15 + 20 * (1 + 12)), this, ID_OPENFILEBUTTON);
 		RichImageConverter.Create(this, ID_RichImage, CRect(10, 10, 50, 50)); 	
 		//RichImageConverter.Load(_T("Image.bmp"));
 		//RichImageConverter.ConvertToImage(pcAutumn);
@@ -97,6 +97,7 @@ void CMainFrame::OnCB_ColorTypeChange()
 {
 	RichImageConverter.ConvertToImage((TPseudoColormap)ComboBox_ColorType.GetCurSel());
 	RichImageConverter.RefreshImage();	
+	int c = ComboBox_ColorType.GetCount();
 }
 
 void CMainFrame::OnBN_SelectFileClick()
@@ -110,7 +111,7 @@ void CMainFrame::OnBN_SelectFileClick()
 		double *data = converter.ConvertHdfImageToCImage(openFileDialog1->FileName, "octimage", width, height);
 		RichImageConverter.Load(data, width, height);
 		delete[] data;
-		RichImageConverter.ConvertToImage(pcBone);
+		RichImageConverter.ConvertToImage(pcAutumn);
 		RichImageConverter.RefreshImage();
 		OnResizeComponents();
 	}
@@ -124,8 +125,8 @@ void CMainFrame::OnResizeComponents(void)
 	int FImageSize = min(ClientRect.Width()-210, ClientRect.Height()-20);
 
 	RichImageConverter.SetImagePos(ClientRect.left+10, ClientRect.top+10, FImageSize, FImageSize, SWP_NOZORDER);
-	ComboBox_ColorType.SetWindowPos(NULL, ClientRect.right-10-210, ClientRect.top+15, 210, 20*(1+12), SWP_NOZORDER);	
-	openFileButton.SetWindowPos(NULL, ClientRect.right - 10 - 210, ClientRect.top + 50, 210, 20 * (1 + 12), SWP_NOZORDER);
+	ComboBox_ColorType.SetWindowPos(NULL, ClientRect.right-10-210, ClientRect.top+15, 210, 20*(1+14), SWP_NOZORDER);	
+	openFileButton.SetWindowPos(NULL, ClientRect.right - 10 - 210, ClientRect.top + 50, 210, 40, SWP_NOZORDER);
 }
 
 
