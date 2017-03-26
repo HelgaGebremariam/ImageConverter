@@ -296,7 +296,7 @@ void CRichImage::LoadFromBitmap(HBITMAP hSourceBmp)
 
 bool CRichImage::LoadFromFile(LPCWSTR AFileName)
 {
-  HBITMAP hBitmap = (HBITMAP)::LoadImage(0, AFileName, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+  HBITMAP hBitmap = (HBITMAP)::LoadImage(0, (LPCSTR)AFileName, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
 	if (hBitmap != NULL)
 	{

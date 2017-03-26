@@ -1,7 +1,7 @@
-// RichImageConverter.cpp : implementation file
+п»ї// RichImageConverter.cpp : implementation file
 #include "stdafx.h"
 #include "RichImageConverter.h"
-
+#include "HdfConverter.h"
 template class CRichImageConverter<byte>;
 template class CRichImageConverter<int>;
 template class CRichImageConverter<double>;
@@ -29,7 +29,7 @@ CRichImageConverter<T>::~CRichImageConverter()
 template <typename T>
 bool CRichImageConverter<T>::CreateBitmapDIB(int AWidth, int AHeight)
 {
-  // заполнить структуру BITMAPINFO, содержащую формат изображения
+  // Г§Г ГЇГ®Г«Г­ГЁГІГј Г±ГІГ°ГіГЄГІГіГ°Гі BITMAPINFO, Г±Г®Г¤ГҐГ°Г¦Г Г№ГіГѕ ГґГ®Г°Г¬Г ГІ ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГї
   BITMAPINFO BitmapInfo;
   memset(&BitmapInfo, 0, sizeof(BITMAPINFO));
 
@@ -40,10 +40,10 @@ bool CRichImageConverter<T>::CreateBitmapDIB(int AWidth, int AHeight)
 	BitmapInfo.bmiHeader.biBitCount = 24;
 	BitmapInfo.bmiHeader.biCompression = BI_RGB;
 
-  // создать контекст устройства, совместимый с главным окном
+  // Г±Г®Г§Г¤Г ГІГј ГЄГ®Г­ГІГҐГЄГ±ГІ ГіГ±ГІГ°Г®Г©Г±ГІГўГ , Г±Г®ГўГ¬ГҐГ±ГІГЁГ¬Г»Г© Г± ГЈГ«Г ГўГ­Г»Г¬ Г®ГЄГ­Г®Г¬
   HDC hDC = CreateCompatibleDC(NULL); 
 
-	// получить указатель на байтовый массив изображения
+	// ГЇГ®Г«ГіГ·ГЁГІГј ГіГЄГ Г§Г ГІГҐГ«Гј Г­Г  ГЎГ Г©ГІГ®ГўГ»Г© Г¬Г Г±Г±ГЁГў ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГї
 	InBitmap = CreateDIBSection(hDC, &BitmapInfo, DIB_RGB_COLORS, (void**)&(InBitmap_BitsPtr), NULL, 0);
 
 	DeleteDC(hDC);
@@ -61,28 +61,28 @@ void CRichImageConverter<T>::DeleteBitmapDIB(void)
 	}
 }
 
-// создать окно для mRichImage
+// Г±Г®Г§Г¤Г ГІГј Г®ГЄГ­Г® Г¤Г«Гї mRichImage
 template <typename T>
 BOOL CRichImageConverter<T>::Create(CWnd* pParentWnd, UINT nID, const RECT& rect, DWORD dwStyle)
 {
 	return mRichImage.Create(pParentWnd, nID, rect); 
 }
 
-// удалить окно mRichImage
+// ГіГ¤Г Г«ГЁГІГј Г®ГЄГ­Г® mRichImage
 template <typename T>
 void CRichImageConverter<T>::DestroyWindow(void)
 {
 	mRichImage.DestroyWindow();
 }
 
-// перерисовать изображение mRichImage
+// ГЇГҐГ°ГҐГ°ГЁГ±Г®ГўГ ГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ mRichImage
 template <typename T>
 void CRichImageConverter<T>::RefreshImage(void)
 {
 	mRichImage.Invalidate();
 }
 
-// изменить положение и размер mRichImage
+// ГЁГ§Г¬ГҐГ­ГЁГІГј ГЇГ®Г«Г®Г¦ГҐГ­ГЁГҐ ГЁ Г°Г Г§Г¬ГҐГ° mRichImage
 template <typename T>
 void CRichImageConverter<T>::SetImagePos(int x, int y, int cx, int cy, UINT nFlags)
 {
@@ -91,7 +91,7 @@ void CRichImageConverter<T>::SetImagePos(int x, int y, int cx, int cy, UINT nFla
 
 
 
-// освободить память занятую массивом плотностей
+// Г®Г±ГўГ®ГЎГ®Г¤ГЁГІГј ГЇГ Г¬ГїГІГј Г§Г Г­ГїГІГіГѕ Г¬Г Г±Г±ГЁГўГ®Г¬ ГЇГ«Г®ГІГ­Г®Г±ГІГҐГ©
 template <typename T>
 void CRichImageConverter<T>::ClearData(void)
 {
@@ -109,23 +109,23 @@ void CRichImageConverter<T>::ClearData(void)
 	DeleteBitmapDIB();
 }
 
-// загрузить изображение из графического файла
+// Г§Г ГЈГ°ГіГ§ГЁГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЁГ§ ГЈГ°Г ГґГЁГ·ГҐГ±ГЄГ®ГЈГ® ГґГ Г©Г«Г 
 template <typename T>
-void CRichImageConverter<T>::Load(const CString& AFileName)
+void CRichImageConverter<T>::Load(const CString& AFileName, byte* img, int height, int width)
 {
-	// очистить память
+	// Г®Г·ГЁГ±ГІГЁГІГј ГЇГ Г¬ГїГІГј
 	ClearData();
 
-	// загрузить изображение в Bitmap
-	CImage LocalImage;
-	LocalImage.Load(AFileName);
-
-	// выделить память для массива плотностей
+	// Г§Г ГЈГ°ГіГ§ГЁГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Гў Bitmap
+	HdfConverter converter;
+	CImage LocalImage = converter.ConvertHdfImageToCImage(AFileName, "octimage");
+	//LocalImage.Load(AFileName);
+	// ГўГ»Г¤ГҐГ«ГЁГІГј ГЇГ Г¬ГїГІГј Г¤Г«Гї Г¬Г Г±Г±ГЁГўГ  ГЇГ«Г®ГІГ­Г®Г±ГІГҐГ©
 	FWidth = LocalImage.GetWidth();
 	FHeight = LocalImage.GetHeight();
 	T* pBuffer = new T[FWidth*FHeight];
 
-	// скопировать изображение в массив FDataPtr
+	// Г±ГЄГ®ГЇГЁГ°Г®ГўГ ГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Гў Г¬Г Г±Г±ГЁГў FDataPtr
 	byte* pBits = (byte *)LocalImage.GetBits();	
 	byte* pRow = pBits;
 
@@ -145,36 +145,36 @@ void CRichImageConverter<T>::Load(const CString& AFileName)
 		pRow += ScanLine;	
 	}
 
-	// сохранить изображение в массив плотностей byte
+	// Г±Г®ГµГ°Г Г­ГЁГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Гў Г¬Г Г±Г±ГЁГў ГЇГ«Г®ГІГ­Г®Г±ГІГҐГ© byte
 	this->Load(pBuffer, FHeight, FWidth);
 
-	// установить _Min  _Max уровень сигнала
+	// ГіГ±ГІГ Г­Г®ГўГЁГІГј _Min  _Max ГіГ°Г®ГўГҐГ­Гј Г±ГЁГЈГ­Г Г«Г 
 	SetSignalMinMax(0, 255);
 
-	// освободить память
+	// Г®Г±ГўГ®ГЎГ®Г¤ГЁГІГј ГЇГ Г¬ГїГІГј
 	delete [] pBuffer;
 }
 
-// загрузить изображение из массива плотностей byte
+// Г§Г ГЈГ°ГіГ§ГЁГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЁГ§ Г¬Г Г±Г±ГЁГўГ  ГЇГ«Г®ГІГ­Г®Г±ГІГҐГ© byte
 template <typename T>
 void CRichImageConverter<T>::Load(T* pInData, int AWidth, int AHeight)
 {
-	// очистить память
+	// Г®Г·ГЁГ±ГІГЁГІГј ГЇГ Г¬ГїГІГј
 	ClearData();
 
-	// выделить память
+	// ГўГ»Г¤ГҐГ«ГЁГІГј ГЇГ Г¬ГїГІГј
 	FWidth = AWidth;
 	FHeight = AHeight;
 	FDataPtr = new T[FWidth*FHeight];
 
-	// скопировать изображение	
+	// Г±ГЄГ®ГЇГЁГ°Г®ГўГ ГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ	
 	memcpy(FDataPtr, pInData, FWidth*FHeight*sizeof(T));
 
-	// выделить память под внутреннее изображение
+	// ГўГ»Г¤ГҐГ«ГЁГІГј ГЇГ Г¬ГїГІГј ГЇГ®Г¤ ГўГ­ГіГІГ°ГҐГ­Г­ГҐГҐ ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ
 	CreateBitmapDIB(AWidth, AHeight);
 }
 
-// определить шкалу сиганала
+// Г®ГЇГ°ГҐГ¤ГҐГ«ГЁГІГј ГёГЄГ Г«Гі Г±ГЁГЈГ Г­Г Г«Г 
 template <typename T>
 void CRichImageConverter<T>::SetSignalMinMax(T _AMin, T _AMax)
 {
@@ -190,14 +190,14 @@ void CRichImageConverter<T>::SetSignalMinMax(T _AMin, T _AMax)
 	}
 }
 
-// преобразовать массив плотностей в изображение, использую цветовую палитру
+// ГЇГ°ГҐГ®ГЎГ°Г Г§Г®ГўГ ГІГј Г¬Г Г±Г±ГЁГў ГЇГ«Г®ГІГ­Г®Г±ГІГҐГ© Гў ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ, ГЁГ±ГЇГ®Г«ГјГ§ГіГѕ Г¶ГўГҐГІГ®ГўГіГѕ ГЇГ Г«ГЁГІГ°Гі
 template <typename T>
 bool CRichImageConverter<T>::ConvertToImage(TPseudoColormap AColormap)
 {
 	if ((!FDataPtr) || (!InBitmap) || (!InBitmap_BitsPtr))
 		return false;
 
-	// получить указатель на функцию преобразования плотности в цвет
+	// ГЇГ®Г«ГіГ·ГЁГІГј ГіГЄГ Г§Г ГІГҐГ«Гј Г­Г  ГґГіГ­ГЄГ¶ГЁГѕ ГЇГ°ГҐГ®ГЎГ°Г Г§Г®ГўГ Г­ГЁГї ГЇГ«Г®ГІГ­Г®Г±ГІГЁ Гў Г¶ГўГҐГІ
 	vec4 (CRichImageColormap::*pFunction_GetColor)(float);
 		
 	switch(AColormap)
@@ -251,17 +251,17 @@ bool CRichImageConverter<T>::ConvertToImage(TPseudoColormap AColormap)
 			break;
 	}	
 
-	// определить указатели на массивы изображений
+	// Г®ГЇГ°ГҐГ¤ГҐГ«ГЁГІГј ГіГЄГ Г§Г ГІГҐГ«ГЁ Г­Г  Г¬Г Г±Г±ГЁГўГ» ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГ©
 	T* SourcePtr = FDataPtr;
 	byte* DestPtr = (byte*) InBitmap_BitsPtr;
 
-	// определить параметры выходного изображения
+	// Г®ГЇГ°ГҐГ¤ГҐГ«ГЁГІГј ГЇГ Г°Г Г¬ГҐГІГ°Г» ГўГ»ГµГ®Г¤Г­Г®ГЈГ® ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГї
 	BITMAP BitmapInfo;
 	ASSERT( GetObject(InBitmap, sizeof(BITMAP), &BitmapInfo) != 0 );  
 	int DestLineScan = BitmapInfo.bmWidthBytes;
 	int DestBPP = BitmapInfo.bmBitsPixel / 8;
 
-  // скопировать изображение из источнка, в байтовый массив данных
+  // Г±ГЄГ®ГЇГЁГ°Г®ГўГ ГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЁГ§ ГЁГ±ГІГ®Г·Г­ГЄГ , Гў ГЎГ Г©ГІГ®ГўГ»Г© Г¬Г Г±Г±ГЁГў Г¤Г Г­Г­Г»Гµ
 	for (int i=0; i < FHeight; i++)
 	{	
 		for (int j=0; j < FWidth; j++)
@@ -271,15 +271,15 @@ bool CRichImageConverter<T>::ConvertToImage(TPseudoColormap AColormap)
 			
 			vec4 FColor = (mColormap.*pFunction_GetColor)((float)PixelValue);
 
-			DestPtr[j*DestBPP + 0] = (byte)(255 * FColor.b);		// синий цвет
-			DestPtr[j*DestBPP + 1] = (byte)(255 * FColor.g);		// зеленый цвет
-			DestPtr[j*DestBPP + 2] = (byte)(255 * FColor.r);		// красный цвет
+			DestPtr[j*DestBPP + 0] = (byte)(255 * FColor.b);		// Г±ГЁГ­ГЁГ© Г¶ГўГҐГІ
+			DestPtr[j*DestBPP + 1] = (byte)(255 * FColor.g);		// Г§ГҐГ«ГҐГ­Г»Г© Г¶ГўГҐГІ
+			DestPtr[j*DestBPP + 2] = (byte)(255 * FColor.r);		// ГЄГ°Г Г±Г­Г»Г© Г¶ГўГҐГІ
 		}
 
 		DestPtr+= DestLineScan;
 	}
 
-	// загрузить изображение в компонент CRichImage
+	// Г§Г ГЈГ°ГіГ§ГЁГІГј ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Гў ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІ CRichImage
 	mRichImage.LoadFromBitmap(InBitmap);
 
 	return true;	

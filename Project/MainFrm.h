@@ -1,12 +1,14 @@
 // MainFrm.h : interface of the CMainFrame class
 #pragma once
 #include "RichImageConverter.h"
+#include "OpenFileDialog.h"
 
 class CMainFrame : public CFrameWnd
 {
 protected:
 	CComboBox ComboBox_ColorType;
 	CRichImageConverter<double> RichImageConverter;
+	CButton openFileButton;
 
 	void OnResizeComponents(void);
 
@@ -22,7 +24,7 @@ protected:
 	afx_msg void OnClose();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnCB_ColorTypeChange();
-
+	afx_msg void OnBN_SelectFileClick();
 	DECLARE_MESSAGE_MAP()
 };
 

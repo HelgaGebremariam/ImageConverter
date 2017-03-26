@@ -3,6 +3,7 @@
 #include <iomanip>
 #include "RichImage.h"
 #include "RichImageColormap.h"
+#include "OpenFileDialog.h"
 
 enum TPseudoColormap
 	{pcAutumn, pcBone,	pcCool, pcCopper, pcHot, pcHSV, pcJet, pcParula, pcPink, pcSpring, pcSummer, pcWinter};
@@ -44,5 +45,3 @@ public:
 
 	bool ConvertToImage(TPseudoColormap AColormap);		// преобразовать массив плотностей в изображение, использую цветовую палитру
 };
-
-

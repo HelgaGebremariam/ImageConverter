@@ -1,4 +1,4 @@
-// MainFrm.cpp : implementation of the CMainFrame class
+п»ї// MainFrm.cpp : implementation of the CMainFrame class
 #include "stdafx.h"
 #include "ImageConvertion.h"
 #include "MainFrm.h"
@@ -43,6 +43,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CLOSE()
 	ON_WM_SIZE()
 	ON_CBN_SELCHANGE(ID_CB_ColorType, &CMainFrame::OnCB_ColorTypeChange)
+	ON_BN_CLICKED(ID_OPENFILEBUTTON, &CMainFrame::OnBN_SelectFileClick)
 END_MESSAGE_MAP()
 
 void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
@@ -69,17 +70,11 @@ void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
 
 		ComboBox_ColorType.SetCurSel(0);
 
-		// создать компонент для вывода изображения
+		openFileButton.Create(_T("Open file"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, CRect(140, 30, 250, 15 + 20 * (1 + 12)), this, ID_OPENFILEBUTTON);
 		RichImageConverter.Create(this, ID_RichImage, CRect(10, 10, 50, 50)); 	
-		
-		RichImageConverter.Load(_T("Image.bmp"));
-		
-		// преобразовать в псевдоцвета 
+		//RichImageConverter.Load(_T("Image.bmp"));
 		RichImageConverter.ConvertToImage(pcAutumn);
-
-		// перерисовка изображения
 		RichImageConverter.RefreshImage();
-
 		OnResizeComponents();
 	}
 }
@@ -100,11 +95,21 @@ void CMainFrame::OnSize(UINT nType, int cx, int cy)
 
 void CMainFrame::OnCB_ColorTypeChange()
 {
-	// преобразовать в псевдоцвета 
 	RichImageConverter.ConvertToImage((TPseudoColormap)ComboBox_ColorType.GetCurSel());
-
-	// перерисовка изображения
 	RichImageConverter.RefreshImage();	
+}
+
+void CMainFrame::OnBN_SelectFileClick()
+{
+	OpenFileDialog* openFileDialog1 = new OpenFileDialog();
+
+	if (openFileDialog1->ShowDialog())
+	{
+		RichImageConverter.Load(openFileDialog1->FileName);
+		RichImageConverter.ConvertToImage(pcAutumn);
+		RichImageConverter.RefreshImage();
+		OnResizeComponents();
+	}
 }
 
 void CMainFrame::OnResizeComponents(void)
@@ -115,7 +120,8 @@ void CMainFrame::OnResizeComponents(void)
 	int FImageSize = min(ClientRect.Width()-210, ClientRect.Height()-20);
 
 	RichImageConverter.SetImagePos(ClientRect.left+10, ClientRect.top+10, FImageSize, FImageSize, SWP_NOZORDER);
-	ComboBox_ColorType.SetWindowPos(NULL, ClientRect.right-10-210, ClientRect.top+15, 210, 20*(1+12), SWP_NOZORDER);		
+	ComboBox_ColorType.SetWindowPos(NULL, ClientRect.right-10-210, ClientRect.top+15, 210, 20*(1+12), SWP_NOZORDER);	
+	openFileButton.SetWindowPos(NULL, ClientRect.right - 10 - 210, ClientRect.top + 50, 210, 20 * (1 + 12), SWP_NOZORDER);
 }
 
 

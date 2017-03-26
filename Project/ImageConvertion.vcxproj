@@ -36,7 +36,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -194,6 +194,7 @@
     <ClInclude Include="HdfConverter.h" />
     <ClInclude Include="ImageConvertion.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="OpenFileDialog.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RichImage.h" />
     <ClInclude Include="RichImageColormap.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="HdfConverter.cpp" />
     <ClCompile Include="ImageConvertion.cpp" />
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="OpenFileDialog.cpp" />
     <ClCompile Include="RichImage.cpp" />
     <ClCompile Include="RichImageColormap.cpp" />
     <ClCompile Include="RichImageConverter.cpp" />

@@ -7,7 +7,7 @@
 #define IDR_ImageConvertionTYPE				130
 #define ID_RichImage				1024
 #define ID_CB_ColorType			1025
-
+#define ID_OPENFILEBUTTON				1026
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
