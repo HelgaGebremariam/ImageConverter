@@ -72,25 +72,9 @@ double* HdfConverter::ConvertHdfImageToCImage(CString sFileName, const char* sDa
 
 	dataset.read(data_out, PredType::IEEE_F64LE, dataspaceOut, dataspace);
 
-	width = dims_out[1];
-	height = dims_out[0];
+	width = dims_out[0];
+	height = dims_out[1];
 
-	//Mat img = Mat(height, width, CV_64F, data_out);
-
-	//cv::imwrite("C://testimage.bmp", img);
-
-	//CImage cimage;
-	//cimage.Create(width, height, 8);
-
-	//for(int  i =0; i < width; i ++)
-	//	for (int j = 0; j < height; j++)
-	//	{
-	//		DoubleColor color;
-	//		color.doubleColor = data_out[i*j + j];
-	//		cimage.SetHasAlphaChannel( false);
-	//		float alfa = color.color.a / 255;
-	//		cimage.SetPixelRGB(i, j, byte(color.color.r * alfa), byte(color.color.g* alfa), byte(color.color.b*alfa));
-	//	}
 	delete[] filename;
 	return data_out;
 

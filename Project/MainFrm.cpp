@@ -73,9 +73,9 @@ void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
 		openFileButton.Create(_T("Open file"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, CRect(140, 30, 250, 15 + 20 * (1 + 12)), this, ID_OPENFILEBUTTON);
 		RichImageConverter.Create(this, ID_RichImage, CRect(10, 10, 50, 50)); 	
 		//RichImageConverter.Load(_T("Image.bmp"));
-		RichImageConverter.ConvertToImage(pcAutumn);
-		RichImageConverter.RefreshImage();
-		OnResizeComponents();
+		//RichImageConverter.ConvertToImage(pcAutumn);
+		//RichImageConverter.RefreshImage();
+		//OnResizeComponents();
 	}
 }
 
@@ -109,8 +109,8 @@ void CMainFrame::OnBN_SelectFileClick()
 		int width, height;
 		double *data = converter.ConvertHdfImageToCImage(openFileDialog1->FileName, "octimage", width, height);
 		RichImageConverter.Load(data, width, height);
-
-		RichImageConverter.ConvertToImage(pcAutumn);
+		delete[] data;
+		RichImageConverter.ConvertToImage(pcBone);
 		RichImageConverter.RefreshImage();
 		OnResizeComponents();
 	}

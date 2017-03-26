@@ -35,7 +35,7 @@ bool CRichImageConverter<T>::CreateBitmapDIB(int AWidth, int AHeight)
 
 	BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	BitmapInfo.bmiHeader.biWidth = AWidth;
-	BitmapInfo.bmiHeader.biHeight = -AHeight;
+	BitmapInfo.bmiHeader.biHeight = AHeight;
 	BitmapInfo.bmiHeader.biPlanes = 1;
 	BitmapInfo.bmiHeader.biBitCount = 24;
 	BitmapInfo.bmiHeader.biCompression = BI_RGB;
@@ -172,6 +172,7 @@ void CRichImageConverter<T>::Load(T* pInData, int AWidth, int AHeight)
 
 	// âûäåëèòü ïàìÿòü ïîä âíóòðåííåå èçîáðàæåíèå
 	CreateBitmapDIB(AWidth, AHeight);
+	SetSignalMinMax(0, 255);
 }
 
 // îïðåäåëèòü øêàëó ñèãàíàëà
