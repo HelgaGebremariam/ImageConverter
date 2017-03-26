@@ -2,6 +2,7 @@
 #pragma once
 #include "RichImageConverter.h"
 #include "OpenFileDialog.h"
+#include "HdfConverter.h"
 
 class CMainFrame : public CFrameWnd
 {

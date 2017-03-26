@@ -27,7 +27,7 @@ class HdfConverter
 {
 public:
 
-	CImage ConvertHdfImageToCImage(CString sFileName, const char* sDatasetName);
+	double* ConvertHdfImageToCImage(CString sFileName, const char* sDatasetName, int& width, int& height);
 	bool Save2HDF(double* dArray2D, const int nRows, const int nColumns, const char* sFileName);
 
 private:

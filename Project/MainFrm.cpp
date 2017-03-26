@@ -105,7 +105,11 @@ void CMainFrame::OnBN_SelectFileClick()
 
 	if (openFileDialog1->ShowDialog())
 	{
-		RichImageConverter.Load(openFileDialog1->FileName);
+		HdfConverter converter;
+		int width, height;
+		double *data = converter.ConvertHdfImageToCImage(openFileDialog1->FileName, "octimage", width, height);
+		RichImageConverter.Load(data, width, height);
+
 		RichImageConverter.ConvertToImage(pcAutumn);
 		RichImageConverter.RefreshImage();
 		OnResizeComponents();

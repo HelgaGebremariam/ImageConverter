@@ -44,7 +44,7 @@ herr_t op_func(hid_t loc_id, const char *name, const H5O_info_t *info,
 	return 0;
 }
 
-CImage HdfConverter::ConvertHdfImageToCImage(CString sFileName, const char* sDatasetName)
+double* HdfConverter::ConvertHdfImageToCImage(CString sFileName, const char* sDatasetName, int& width, int& height)
 {
 	int nRows = 0, nColumns = 0;
 	char *filename = new char[sFileName.GetLength() + 1];
@@ -72,27 +72,27 @@ CImage HdfConverter::ConvertHdfImageToCImage(CString sFileName, const char* sDat
 
 	dataset.read(data_out, PredType::IEEE_F64LE, dataspaceOut, dataspace);
 
-	int width = dims_out[0];
-	int height = dims_out[1];
+	width = dims_out[1];
+	height = dims_out[0];
 
-	Mat img = Mat(height, width, CV_64F, data_out);
+	//Mat img = Mat(height, width, CV_64F, data_out);
 
-	cv::imwrite("C://testimage.bmp", img);
+	//cv::imwrite("C://testimage.bmp", img);
 
-	CImage cimage;
-	cimage.Create(width, height, 8);
+	//CImage cimage;
+	//cimage.Create(width, height, 8);
 
-	for(int  i =0; i < width; i ++)
-		for (int j = 0; j < height; j++)
-		{
-			DoubleColor color;
-			color.doubleColor = data_out[i*j + j];
-			cimage.SetHasAlphaChannel( false);
-			float alfa = color.color.a / 255;
-			cimage.SetPixelRGB(i, j, byte(color.color.r * alfa), byte(color.color.g* alfa), byte(color.color.b*alfa));
-		}
+	//for(int  i =0; i < width; i ++)
+	//	for (int j = 0; j < height; j++)
+	//	{
+	//		DoubleColor color;
+	//		color.doubleColor = data_out[i*j + j];
+	//		cimage.SetHasAlphaChannel( false);
+	//		float alfa = color.color.a / 255;
+	//		cimage.SetPixelRGB(i, j, byte(color.color.r * alfa), byte(color.color.g* alfa), byte(color.color.b*alfa));
+	//	}
 	delete[] filename;
-	return cimage;
+	return data_out;
 
 }
 

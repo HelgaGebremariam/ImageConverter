@@ -1,7 +1,7 @@
 ﻿// RichImageConverter.cpp : implementation file
 #include "stdafx.h"
 #include "RichImageConverter.h"
-#include "HdfConverter.h"
+
 template class CRichImageConverter<byte>;
 template class CRichImageConverter<int>;
 template class CRichImageConverter<double>;
@@ -29,9 +29,9 @@ CRichImageConverter<T>::~CRichImageConverter()
 template <typename T>
 bool CRichImageConverter<T>::CreateBitmapDIB(int AWidth, int AHeight)
 {
-  // çàïîëíèòü ñòðóêòóðó BITMAPINFO, ñîäåðæàùóþ ôîðìàò èçîáðàæåíèÿ
-  BITMAPINFO BitmapInfo;
-  memset(&BitmapInfo, 0, sizeof(BITMAPINFO));
+	// çàïîëíèòü ñòðóêòóðó BITMAPINFO, ñîäåðæàùóþ ôîðìàò èçîáðàæåíèÿ
+	BITMAPINFO BitmapInfo;
+	memset(&BitmapInfo, 0, sizeof(BITMAPINFO));
 
 	BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	BitmapInfo.bmiHeader.biWidth = AWidth;
@@ -40,14 +40,14 @@ bool CRichImageConverter<T>::CreateBitmapDIB(int AWidth, int AHeight)
 	BitmapInfo.bmiHeader.biBitCount = 24;
 	BitmapInfo.bmiHeader.biCompression = BI_RGB;
 
-  // ñîçäàòü êîíòåêñò óñòðîéñòâà, ñîâìåñòèìûé ñ ãëàâíûì îêíîì
-  HDC hDC = CreateCompatibleDC(NULL); 
+	// ñîçäàòü êîíòåêñò óñòðîéñòâà, ñîâìåñòèìûé ñ ãëàâíûì îêíîì
+	HDC hDC = CreateCompatibleDC(NULL);
 
 	// ïîëó÷èòü óêàçàòåëü íà áàéòîâûé ìàññèâ èçîáðàæåíèÿ
 	InBitmap = CreateDIBSection(hDC, &BitmapInfo, DIB_RGB_COLORS, (void**)&(InBitmap_BitsPtr), NULL, 0);
 
 	DeleteDC(hDC);
-	
+
 	return (InBitmap != NULL);
 }
 
@@ -56,7 +56,7 @@ void CRichImageConverter<T>::DeleteBitmapDIB(void)
 {
 	if (InBitmap != NULL)
 	{
-		DeleteObject(InBitmap);		
+		DeleteObject(InBitmap);
 		InBitmap = NULL;
 	}
 }
@@ -65,7 +65,7 @@ void CRichImageConverter<T>::DeleteBitmapDIB(void)
 template <typename T>
 BOOL CRichImageConverter<T>::Create(CWnd* pParentWnd, UINT nID, const RECT& rect, DWORD dwStyle)
 {
-	return mRichImage.Create(pParentWnd, nID, rect); 
+	return mRichImage.Create(pParentWnd, nID, rect);
 }
 
 // óäàëèòü îêíî mRichImage
@@ -96,7 +96,7 @@ template <typename T>
 void CRichImageConverter<T>::ClearData(void)
 {
 	if (FDataPtr)
-		delete [] FDataPtr;
+		delete[] FDataPtr;
 
 	FDataPtr = NULL;
 
@@ -111,30 +111,30 @@ void CRichImageConverter<T>::ClearData(void)
 
 // çàãðóçèòü èçîáðàæåíèå èç ãðàôè÷åñêîãî ôàéëà
 template <typename T>
-void CRichImageConverter<T>::Load(const CString& AFileName, byte* img, int height, int width)
+void CRichImageConverter<T>::Load(const CString& AFileName)
 {
 	// î÷èñòèòü ïàìÿòü
 	ClearData();
 
 	// çàãðóçèòü èçîáðàæåíèå â Bitmap
-	HdfConverter converter;
-	CImage LocalImage = converter.ConvertHdfImageToCImage(AFileName, "octimage");
-	//LocalImage.Load(AFileName);
+	CImage LocalImage;
+	LocalImage.Load(AFileName);
+
 	// âûäåëèòü ïàìÿòü äëÿ ìàññèâà ïëîòíîñòåé
 	FWidth = LocalImage.GetWidth();
 	FHeight = LocalImage.GetHeight();
 	T* pBuffer = new T[FWidth*FHeight];
 
 	// ñêîïèðîâàòü èçîáðàæåíèå â ìàññèâ FDataPtr
-	byte* pBits = (byte *)LocalImage.GetBits();	
+	byte* pBits = (byte *)LocalImage.GetBits();
 	byte* pRow = pBits;
 
 	int ScanLine = LocalImage.GetPitch();
-	int BytesPerPixel = LocalImage.GetBPP()/8;
+	int BytesPerPixel = LocalImage.GetBPP() / 8;
 
-	for (int i=0; i < FHeight; i++)
-	{	
-		for (int j=0; j < FWidth; j++)
+	for (int i = 0; i < FHeight; i++)
+	{
+		for (int j = 0; j < FWidth; j++)
 		{
 			byte bValue = pRow[j*BytesPerPixel + 0];
 			byte gValue = pRow[j*BytesPerPixel + 1];
@@ -142,7 +142,7 @@ void CRichImageConverter<T>::Load(const CString& AFileName, byte* img, int heigh
 
 			pBuffer[i*FWidth + j] = (T)(0.299*rValue + 0.587*gValue + 0.114*bValue);
 		}
-		pRow += ScanLine;	
+		pRow += ScanLine;
 	}
 
 	// ñîõðàíèòü èçîáðàæåíèå â ìàññèâ ïëîòíîñòåé byte
@@ -152,7 +152,7 @@ void CRichImageConverter<T>::Load(const CString& AFileName, byte* img, int heigh
 	SetSignalMinMax(0, 255);
 
 	// îñâîáîäèòü ïàìÿòü
-	delete [] pBuffer;
+	delete[] pBuffer;
 }
 
 // çàãðóçèòü èçîáðàæåíèå èç ìàññèâà ïëîòíîñòåé byte
@@ -168,7 +168,7 @@ void CRichImageConverter<T>::Load(T* pInData, int AWidth, int AHeight)
 	FDataPtr = new T[FWidth*FHeight];
 
 	// ñêîïèðîâàòü èçîáðàæåíèå	
-	memcpy(FDataPtr, pInData, FWidth*FHeight*sizeof(T));
+	memcpy(FDataPtr, pInData, FWidth*FHeight * sizeof(T));
 
 	// âûäåëèòü ïàìÿòü ïîä âíóòðåííåå èçîáðàæåíèå
 	CreateBitmapDIB(AWidth, AHeight);
@@ -181,12 +181,12 @@ void CRichImageConverter<T>::SetSignalMinMax(T _AMin, T _AMax)
 	if (_AMin < _AMax)
 	{
 		FMinSignal = _AMin;
-		FMaxSignal = _AMax;	
+		FMaxSignal = _AMax;
 	}
 	else
 	{
 		FMinSignal = _AMax;
-		FMaxSignal = _AMin;	
+		FMaxSignal = _AMin;
 	}
 }
 
@@ -198,77 +198,77 @@ bool CRichImageConverter<T>::ConvertToImage(TPseudoColormap AColormap)
 		return false;
 
 	// ïîëó÷èòü óêàçàòåëü íà ôóíêöèþ ïðåîáðàçîâàíèÿ ïëîòíîñòè â öâåò
-	vec4 (CRichImageColormap::*pFunction_GetColor)(float);
-		
-	switch(AColormap)
+	vec4(CRichImageColormap::*pFunction_GetColor)(float);
+
+	switch (AColormap)
 	{
-		case pcAutumn:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Autumn;
-			break;
-			
-		case pcBone:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Bone;	
-			break;
+	case pcAutumn:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Autumn;
+		break;
 
-		case pcCool:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Cool;
-			break;
+	case pcBone:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Bone;
+		break;
 
-		case pcCopper:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Copper;
-			break;
+	case pcCool:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Cool;
+		break;
 
-		case pcHot:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Hot;	
-			break;
+	case pcCopper:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Copper;
+		break;
 
-		case pcHSV:
-			pFunction_GetColor = &CRichImageColormap::GetColor_HSV;
-			break;
+	case pcHot:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Hot;
+		break;
 
-		case pcJet:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Jet;
-			break;
+	case pcHSV:
+		pFunction_GetColor = &CRichImageColormap::GetColor_HSV;
+		break;
 
-		case pcParula:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Parula;
-			break;
+	case pcJet:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Jet;
+		break;
 
-		case pcPink:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Pink;	
-			break;
+	case pcParula:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Parula;
+		break;
 
-		case pcSpring:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Spring;
-			break;
+	case pcPink:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Pink;
+		break;
 
-		case pcSummer:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Summer;	
-			break;
+	case pcSpring:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Spring;
+		break;
 
-		case pcWinter:
-			pFunction_GetColor = &CRichImageColormap::GetColor_Winter;
-			break;
-	}	
+	case pcSummer:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Summer;
+		break;
+
+	case pcWinter:
+		pFunction_GetColor = &CRichImageColormap::GetColor_Winter;
+		break;
+	}
 
 	// îïðåäåëèòü óêàçàòåëè íà ìàññèâû èçîáðàæåíèé
 	T* SourcePtr = FDataPtr;
-	byte* DestPtr = (byte*) InBitmap_BitsPtr;
+	byte* DestPtr = (byte*)InBitmap_BitsPtr;
 
 	// îïðåäåëèòü ïàðàìåòðû âûõîäíîãî èçîáðàæåíèÿ
 	BITMAP BitmapInfo;
-	ASSERT( GetObject(InBitmap, sizeof(BITMAP), &BitmapInfo) != 0 );  
+	ASSERT(GetObject(InBitmap, sizeof(BITMAP), &BitmapInfo) != 0);
 	int DestLineScan = BitmapInfo.bmWidthBytes;
 	int DestBPP = BitmapInfo.bmBitsPixel / 8;
 
-  // ñêîïèðîâàòü èçîáðàæåíèå èç èñòî÷íêà, â áàéòîâûé ìàññèâ äàííûõ
-	for (int i=0; i < FHeight; i++)
-	{	
-		for (int j=0; j < FWidth; j++)
+	// ñêîïèðîâàòü èçîáðàæåíèå èç èñòî÷íêà, â áàéòîâûé ìàññèâ äàííûõ
+	for (int i = 0; i < FHeight; i++)
+	{
+		for (int j = 0; j < FWidth; j++)
 		{
-			double PixelValue = SourcePtr[i*FWidth + j];			
+			double PixelValue = SourcePtr[i*FWidth + j];
 			PixelValue = abs(PixelValue - FMinSignal) / abs(FMaxSignal - FMinSignal);
-			
+
 			vec4 FColor = (mColormap.*pFunction_GetColor)((float)PixelValue);
 
 			DestPtr[j*DestBPP + 0] = (byte)(255 * FColor.b);		// ñèíèé öâåò
@@ -276,12 +276,12 @@ bool CRichImageConverter<T>::ConvertToImage(TPseudoColormap AColormap)
 			DestPtr[j*DestBPP + 2] = (byte)(255 * FColor.r);		// êðàñíûé öâåò
 		}
 
-		DestPtr+= DestLineScan;
+		DestPtr += DestLineScan;
 	}
 
 	// çàãðóçèòü èçîáðàæåíèå â êîìïîíåíò CRichImage
 	mRichImage.LoadFromBitmap(InBitmap);
 
-	return true;	
+	return true;
 }
 
