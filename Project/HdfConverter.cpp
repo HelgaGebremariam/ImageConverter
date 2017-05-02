@@ -20,6 +20,7 @@ union DoubleColor
 	RGBA color;
 	double doubleColor;
 };
+
 herr_t op_func(hid_t loc_id, const char *name, const H5O_info_t *info,
 	void *operator_data)
 {
@@ -47,9 +48,11 @@ herr_t op_func(hid_t loc_id, const char *name, const H5O_info_t *info,
 double* HdfConverter::ConvertHdfImageToCImage(CString sFileName, const char* sDatasetName, int& width, int& height)
 {
 	int nRows = 0, nColumns = 0;
+
 	char *filename = new char[sFileName.GetLength() + 1];
 	strcpy(filename, (LPCTSTR)sFileName);
 	H5File file(filename, H5F_ACC_RDWR);
+
 	int c = file.getNumObjs();
 	DataSet dataset = file.openDataSet(sDatasetName);
 

@@ -111,7 +111,7 @@ void CMainFrame::OnBN_SelectFileClick()
 		double *data = converter.ConvertHdfImageToCImage(openFileDialog1->FileName, "octimage", width, height);
 		RichImageConverter.Load(data, width, height);
 		delete[] data;
-		RichImageConverter.ConvertToImage(pcAutumn);
+		RichImageConverter.ConvertToImage((TPseudoColormap)ComboBox_ColorType.GetCurSel());
 		RichImageConverter.RefreshImage();
 		OnResizeComponents();
 	}
